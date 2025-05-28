@@ -2,8 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.TELEHEALTH" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#F16ABB9A</item>
+        <item name="android:statusBarColor">@color/green_main</item>
     </style>
 
-    <style name="Theme.TELEHEALTH" parent="Base.Theme.TELEHEALTH" />
+    <style name="Theme.TELEHEALTH" parent="Base.Theme.TELEHEALTH">
+        <item name="android:statusBarColor">@color/green_main</item>
+    </style>
 </resources>
