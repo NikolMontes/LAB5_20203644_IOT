@@ -1,5 +1,10 @@
 package com.example.telehealth.Bean;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Medicamento {
     private Integer id;
     private String nombre;
@@ -84,6 +89,18 @@ public class Medicamento {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public long getTimestampInicio() {
+        try {
+            String formato = "dd/MM/yyyy hh:mm a";
+            SimpleDateFormat sdf = new SimpleDateFormat(formato, Locale.getDefault());
+            Date fecha = sdf.parse(this.fechaInicio + " " + this.horaInicio);
+            return fecha.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return System.currentTimeMillis(); // fallback
+        }
     }
 
 }

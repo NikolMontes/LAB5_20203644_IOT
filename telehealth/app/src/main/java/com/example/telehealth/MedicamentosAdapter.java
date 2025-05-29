@@ -1,5 +1,7 @@
 package com.example.telehealth;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telehealth.Bean.Medicamento;
@@ -49,10 +52,31 @@ public class MedicamentosAdapter extends RecyclerView.Adapter<MedicamentosAdapte
         holder.tvFechaHoraInicio.setText(fechaHora);
         // Click en eliminar
         holder.btnEliminar.setOnClickListener(v -> {
-            if (deleteClickListener != null) {
-                deleteClickListener.onDeleteClick(position);
-            }
+            Context context = holder.itemView.getContext();
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle("Confirmar eliminación")
+                    .setMessage("¿Estás seguro de que deseas eliminar este medicamento?")
+                    .setPositiveButton("Sí", (dialogInterface, which) -> {
+                        if (deleteClickListener != null) {
+                            deleteClickListener.onDeleteClick(position);
+                        }
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .create();
+
+            dialog.setOnShowListener(dialogInterface -> {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                        ContextCompat.getColor(context, R.color.red)
+                );
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                        ContextCompat.getColor(context, R.color.blue)
+                );
+            });
+
+            dialog.show();
+
         });
+
     }
 
     @Override
@@ -71,94 +95,4 @@ public class MedicamentosAdapter extends RecyclerView.Adapter<MedicamentosAdapte
             btnEliminar = itemView.findViewById(R.id.btnDelete);
         }
     }
-
-    //private OnMedicamentoClickListener listener;
-   /* public interface OnMedicamentoClickListener {
-        void onMedicamentoClick(Medicamento medicamento);
-        void onDeleteClick(Medicamento medicamento);
-    }
-
-    public MedicamentosAdapter(OnMedicamentoClickListener listener) {
-        this.medicamentos = new ArrayList<>();
-        this.listener = listener;
-    }
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_medicamento, parent, false);
-        return new RecyclerView.ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Medicamento medicamento = medicamentos.get(position);
-        holder.bind(medicamento);
-    }
-
-    @Override
-    public int getItemCount() {
-        return medicamentos.size();
-    }
-
-    public void updateMedicamentos(List<Medicamento> nuevaLista) {
-        this.medicamentos.clear();
-        this.medicamentos.addAll(nuevaLista);
-        notifyDataSetChanged();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvNombre, tvTipoDosis, tvFrecuencia, tvFechaHora;
-        private ImageView ivTipo;
-        private ImageButton btnEliminar;
-
-        ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvNombre = itemView.findViewById(R.id.tvMedicineName);
-            tvTipoDosis = itemView.findViewById(R.id.tv_tipo_dosis);
-            tvFrecuencia = itemView.findViewById(R.id.tv_frecuencia);
-            tvFechaHora = itemView.findViewById(R.id.tv_fecha_hora);
-            ivTipo = itemView.findViewById(R.id.iv_tipo_medicamento);
-            btnEliminar = itemView.findViewById(R.id.btn_eliminar);
-
-            itemView.setOnClickListener(v -> {
-                if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                    listener.onMedicamentoClick(medicamentos.get(getAdapterPosition()));
-                }
-            });
-
-            btnEliminar.setOnClickListener(v -> {
-                if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                    listener.onDeleteClick(medicamentos.get(getAdapterPosition()));
-                }
-            });
-        }
-
-        void bind(Medicamento medicamento) {
-            tvNombre.setText(medicamento.getNombre());
-            tvTipoDosis.setText(medicamento.getTipo() + " - " + medicamento.getDosis());
-            tvFrecuencia.setText("Cada " + medicamento.getFrecuenciaHoras() + " horas");
-            tvFechaHora.setText("Desde: " + medicamento.getFechaInicio() + " " + medicamento.getHoraInicio());
-
-            // Establecer icono según el tipo
-            int iconoRes = getIconoTipo(medicamento.getTipo());
-            ivTipo.setImageResource(iconoRes);
-        }
-
-        private int getIconoTipo(String tipo) {
-            switch (tipo.toLowerCase()) {
-                case "pastilla":
-                    return R.drawable.ic_pill;
-                case "jarabe":
-                    return R.drawable.ic_syrup;
-                case "ampolla":
-                    return R.drawable.ic_injection;
-                case "cápsula":
-                    return R.drawable.ic_capsule;
-                default:
-                    return R.drawable.ic_medicine;
-            }
-        }
-    }*/
 }

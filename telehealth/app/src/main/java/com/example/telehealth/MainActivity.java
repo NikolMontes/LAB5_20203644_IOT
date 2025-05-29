@@ -63,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.green_main)); // Tu color deseado
         }
         setContentView(R.layout.activity_main);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
+            }
+        }
 
         tvsaludo = findViewById(R.id.tvsaludo);
         tvfrase = findViewById(R.id.tvfrase);
@@ -169,6 +177,18 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d("IMAGEN NO CARGADA", "No se encontró imagen guardada");
+            }
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1001) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permiso de notificaciones concedido", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No se mostrarán notificaciones motivacionales", Toast.LENGTH_SHORT).show();
             }
         }
     }

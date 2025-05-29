@@ -10,8 +10,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/idCardView"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="40dp"
         app:cardElevation="6dp"
@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="TextView"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         app:layout_constraintBottom_toTopOf="@+id/tvfrase"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
